@@ -5,9 +5,7 @@
 <title>Table to CSV Exporter</title>
 
 <style type="text/css">
-/*
-This adds some basic styling to the table so it can be read better.
-*/
+/*This adds some basic styling to the table so it can be read better.*/
 	table, tr, th, td{
 		border: 1px solid black;
 		border-collapse: collapse;
@@ -15,19 +13,43 @@ This adds some basic styling to the table so it can be read better.
 	th, td{
 		padding: 5px;
 	}
+
+	#table_container{
+		max-width: 800px;
+		max-height: 600px;
+		overflow: scroll;
+	}
 </style>
-<!--jQuery is required for the code to work.  You can always use jQuery's CDN or those provided by Google or Microsoft-->
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<!--jQuery is required for the code to work.  A reference to jQuery's minified code CDN is provided-->
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
 <!--This references the JavaScript file for the table_to_csv function.-->
-<script type="text/javascript" src="table_to_csv_code/js/table_to_csv.js"></script>
+<script type="text/javascript" src="table_to_csv_code/js/tableToCsv.js"></script>
 <script>
+//This function creates a 10,000 row, 10 column table as a way of demonstrating the size of table the code is capable of handling.
+function createTable(){
+	var tableHtml = '<tr>';
+	for(var i=1; i<=10; i++){
+		tableHtml +='<th>Heading '+i+'</th>';
+	}
+	tableHtml +='</tr>';
+	for(var r=1; r<=10000; r++){
+		tableHtml += '<tr>';
+		for (var e=1; e <=10; e++){
+			tableHtml +='<td>Row '+r+' Entry '+e+'</td>';
+		}
+		tableHtml += '</tr>';
+	}
+	$('#table_export').html(tableHtml);
+}
+
 //This is a jQuery example of how to call up the table_to_csv function.  Please feel free to modify it as necessry for your use.
 $(document).ready(function(){
+	createTable();
 	$("#csv_export").click(function(){
 		$("table").each(function(){
 			if($(this).attr("id") !== undefined){
-				//The first attribute for the table_to_csv function is the table element id.  The second attribute is the file name (the .csv extention is automatically added), and the third is the temporary delimiter (will not interfere with the overall delimiting process).  All three attributes are required, but two and three may be left blank for the system defaults.
-				table_to_csv($(this).attr("id"), "table_to_csv_export", "|");
+				//The first attribute for the table_to_csv function is the table element id.  The second attribute is the file name (the .csv extention is automatically added).  The first attribute is required, but the second may be left blank for the system defaults.
+				tableToCsv($(this).attr("id"), "table_to_csv_export");
 			}
 		});
 	});
@@ -39,50 +61,10 @@ $(document).ready(function(){
 <body>
 <h1>Table to CSV Exporter</h1>
 <!--Each table must have an element id for the table_to_csv function to read it.-->
-<table id="table_export">
-	<tr>
-		<th>Heading 1</th>
-		<th>Heading 2</th>
-		<th>Heading 3</th>
-		<th>Heading 4</th>
-		<th>Heading 5</th>
-	</tr>
-	<tr>
-		<td>Row 1 Entry 1</td>
-		<td>Row 1 Entry 2</td>
-		<td>Row 1 Entry 3</td>
-		<td>Row 1 Entry 4</td>
-		<td>Row 1 Entry 5</td>
-	</tr>
-	<tr>
-		<td>Row 2 Entry 1</td>
-		<td>Row 2 Entry 2</td>
-		<td>Row 2 Entry 3</td>
-		<td>Row 2 Entry 4</td>
-		<td>Row 2 Entry 5</td>
-	</tr>
-	<tr>
-		<td>Row 3 Entry 1</td>
-		<td>Row 3 Entry 2</td>
-		<td>Row 3 Entry 3</td>
-		<td>Row 3 Entry 4</td>
-		<td>Row 3 Entry 5</td>
-	</tr>
-	<tr>
-		<td>Row 4 Entry 1</td>
-		<td>Row 4 Entry 2</td>
-		<td>Row 4 Entry 3</td>
-		<td>Row 4 Entry 4</td>
-		<td>Row 4 Entry 5</td>
-	</tr>
-	<tr>
-		<td>Row 5 Entry 1</td>
-		<td>Row 5 Entry 2</td>
-		<td>Row 5 Entry 3</td>
-		<td>Row 5 Entry 4</td>
-		<td>Row 5 Entry 5</td>
-	</tr>
-</table>
+<div id="table_container">
+	<table id="table_export">
+	</table>
+</div>
 <!--I used the jQuery click reference to activate all of the code.  It keeps the button HTML code clean.-->
 <p><input type="button" name="csv_export" id="csv_export" value="Export to CSV" /></p>
 
